@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introduction & System Analysis - Your Name</title>
+    <title>Introduction & System Analysis - Minahil Saleem</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="subpage.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="container">
-            <h1 class="logo"><a href="index.html">Your Name</a></h1>
+            <h1 class="logo"><a href="index.html">Minahil Saleem</a></h1>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="introduction.html" class="active">Introduction</a></li>
@@ -22,7 +21,6 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
     <section class="page-header">
         <div class="container">
             <h1>Introduction & System Analysis</h1>
@@ -30,158 +28,142 @@
         </div>
     </section>
 
-    <!-- Content Section -->
     <section class="content-section">
         <div class="container">
             <div class="content-wrapper">
                 
-                <!-- Problem Overview -->
                 <div class="content-block">
                     <h2>Problem Overview</h2>
-                    <p><strong>What is the problem?</strong> Define the problem clearly and concisely.</p>
-                    <p><strong>Why is it significant?</strong> Explain why this problem matters and its broader implications.</p>
-                    <p><strong>Who does it affect?</strong> Identify the communities, populations, or stakeholders impacted by this problem.</p>
+                    <p><strong>What is the problem?</strong> The United States financial disclosure system relies on a legally mandated 48 hour reporting delay that grants corporate insiders a temporal monopoly on market moving knowledge. By auditing over 1.7 million SEC Form 4 transactions this project examines how the algorithm of this Reported Silence functions as a structural mechanism for wealth extraction.</p>
+                    <p><strong>Why is it significant?</strong> Ethics rules nominally mandate transparency but the timing and format of this data are not neutral. They actively shape who can benefit from market shifts. Transparency without speed is merely a historical record of wealth extraction. The 48 hour delay is not a clerical buffer but a systemic tool that extracts retirement wealth by ensuring information only saturates the top.</p>
+                    <p><strong>Who does it affect?</strong> A two tiered information economy has emerged. On one side are the Data Elite including institutional hedge funds and high wealth insiders who weaponize perfect administrative compliance to reposition portfolios in the dark. On the other side is the American middle class whose 401k plans and pension funds operate on slower public facing cycles. The average citizen encounters financial data only after the fact absorbing the market volatility and mathematical aftershocks of elite capital flight.</p>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- System Overview -->
                 <div class="content-block">
-                    <h2>Data Initiative/Algorithm Overview</h2>
-                    <p>Describe the existing data initiative or algorithm that aims to address this problem.</p>
+                    <h2>Data Initiative and Algorithm Overview</h2>
+                    <p>This project focuses on the intersection of the primary federal disclosure algorithm and the counter data platforms that ingest its outputs. The baseline system is the Securities and Exchange Commission EDGAR database which serves as the official repository for insider transaction data.</p>
                     
                     <div class="info-grid">
                         <div class="info-item">
                             <h4>What does it claim to do?</h4>
-                            <p>Describe the stated purpose and goals of the system.</p>
+                            <p>The SEC reporting system operates on a binary algorithmic logic based on a rigid 48 hour window where a trade is either on time or delayed. It claims to ensure market fairness and transparency by legally mandating that insiders disclose their transactions to the public.</p>
                         </div>
                         <div class="info-item">
                             <h4>Who uses it?</h4>
-                            <p>Identify the users, implementers, and decision-makers.</p>
+                            <p>Corporate insiders author the filings. The SEC acts as a passive repository. Institutional actors and hedge funds use counter data platforms like Refinitiv LSEG to access the data instantly. Retail traders use platforms like Quiver Quantitative or OpenInsider to track trends.</p>
                         </div>
                         <div class="info-item">
                             <h4>Why does it matter?</h4>
-                            <p>Explain the significance and scale of this system.</p>
+                            <p>It matters because analyzing these systems reveals how structural power is maintained. The system does not fix the inequality of the SEC delay. Institutional platforms commodify the delay for hedge funds while populist platforms gamify it for retail traders.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-
-                <!-- Data Provenance -->
-                <div class="content-block">
+               <div class="content-block">
                     <h2>Data Provenance</h2>
                     
                     <div class="provenance-section">
                         <h3>Data Sources</h3>
                         <ul>
-                            <li><strong>Where did the data come from?</strong> Identify the original sources of the data.</li>
-                            <li><strong>Who collected it?</strong> Name the organizations, institutions, or individuals responsible for data collection.</li>
-                            <li><strong>When was it collected?</strong> Specify the time period and frequency of data collection.</li>
-                            <li><strong>How was it collected?</strong> Describe the methods and tools used for data collection.</li>
+                            <li><strong>Where did the data come from?</strong> The primary dataset consists of SEC Form 4 Non Derivative Transactions accessed via the EDGAR database.</li>
+                            <li><strong>Who collected it?</strong> The data is mandated and hosted by the federal government but authored entirely by corporate insiders.</li>
+                            <li><strong>When was it collected?</strong> The audit covers 1.7 million records organized quarterly from January 2020 to December 2025.</li>
+                            <li><strong>How was it collected?</strong> Data is collected through mandatory electronic self reported filings submitted by insiders to the SEC.</li>
                         </ul>
                     </div>
                     
                     <div class="provenance-section">
                         <h3>Data Control & Access</h3>
                         <ul>
-                            <li><strong>Who controls the data?</strong> Identify who has ownership and decision-making power over the data.</li>
-                            <li><strong>Who has access?</strong> Describe who can access, use, or analyze the data.</li>
-                            <li><strong>What are the access restrictions?</strong> Explain any barriers to data access.</li>
+                            <li><strong>Who controls the data?</strong> The federal government maintains the repository but private capital controls the actionable data through high speed API access.</li>
+                            <li><strong>Who has access?</strong> The data is technically public but institutional actors pay for direct ultra low latency pipelines to bypass public friction.</li>
+                            <li><strong>What are the access restrictions?</strong> The state weaponizes format as a form of friction. Public data is siloed into fragmented quarterly tab separated TSV files requiring significant invisible labor to consolidate and analyze.</li>
                         </ul>
                     </div>
                     
                     <div class="critical-box">
                         <h3>What's Missing?</h3>
-                        <p>Critically examine what data is <em>not</em> collected or included. Consider:</p>
+                        <p>Critically examining the absent data reveals systemic blind spots:</p>
                         <ul>
-                            <li>Which communities or perspectives are excluded?</li>
-                            <li>What variables or dimensions are absent?</li>
-                            <li>Why might certain data be missing? (intentional exclusion, lack of resources, structural barriers, etc.)</li>
-                            <li>How do these absences shape what the data can and cannot tell us?</li>
+                            <li>Point of entry verification is missing. The SEC database accepts glaring anomalies including reporting delays logged as occurring thousands of years in the past without triggering systemic alarms.</li>
+                            <li>When researchers clean this data using standard error handling techniques corrupted date strings are dropped. This creates a survivorship bias that hides the most evasive and unaccountable actors.</li>
+                            <li>The context or intent behind a trade is excluded flattening complex human behavior and situated knowledges into clinical metrics.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- Power Analysis -->
                 <div class="content-block">
                     <h2>Power Structures Analysis</h2>
-                    <p>Examine how power operates in relation to this problem and data initiative.</p>
+                    <p>Examining how power operates within the financial disclosure ecosystem reveals a hierarchy optimized for institutional speed.</p>
                     
                     <div class="power-analysis-grid">
                         <div class="power-item">
-                            <h4>🏛️ Institutional Power</h4>
-                            <p>What institutions are involved? How do they shape the problem and the data initiative?</p>
+                            <h4>Institutional Power</h4>
+                            <p>The regulatory algorithm grants insiders a window of privacy to reposition their wealth before the public can react. The highest wealth insiders possess the highest rates of perfect compliance using expensive legal teams to master the algorithmic deadline and shield massive capital flights from regulatory scrutiny.</p>
                         </div>
                         
                         <div class="power-item">
-                            <h4>💰 Economic Power</h4>
-                            <p>Who funds this initiative? What economic interests are at play?</p>
+                            <h4>Economic Power</h4>
+                            <p>While the SEC data is publicly funded venture backed platforms and massive corporate subscriptions control its distribution. Platforms like Refinitiv monetize the reporting silence extracting profit by providing ultra low latency feeds to elite clients at the expense of slower public market participants.</p>
                         </div>
                         
                         <div class="power-item">
-                            <h4>📊 Data Power</h4>
-                            <p>Who has the power to collect, analyze, and interpret the data? Who doesn't?</p>
+                            <h4>Data Power</h4>
+                            <p>The government maintains the illusion of a public commons but the power to process and act on the data is restricted. High frequency counter data platforms extract the alpha from the market leaving retail investors and pension fund managers to absorb the mathematical aftershocks.</p>
                         </div>
                         
                         <div class="power-item">
-                            <h4>🗣️ Narrative Power</h4>
-                            <p>Whose stories are told through this data? Whose are silenced?</p>
+                            <h4>Narrative Power</h4>
+                            <p>The data creates an illusion of objective truth. It forces human behavior into a clean predictive binary hiding the messy unverified nature of self reported data behind proprietary mathematics. The narrative is framed around compliance while silencing the reality of wealth extraction.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- Positionality -->
                 <div class="content-block">
                     <h2>Positionality Statement</h2>
                     <div class="positionality-box">
-                        <p><strong>Why does this matter to you?</strong> Reflect on your personal connection to this topic.</p>
-                        <p><strong>What is your relationship to this data or community?</strong> Consider your own position, privileges, and limitations in relation to the research.</p>
-                        <p><strong>How might your perspective shape your analysis?</strong> Acknowledge how your background and experiences influence your interpretation.</p>
+                        <p><strong>Why does this matter to you?</strong> As a Math major and Data Science minor at Bryn Mawr College I am trained to treat data as something that can be cleaned coerced and modeled until it yields a reliable signal. In my quantitative coursework correctness is defined by mathematical convergence and statistical validity. In my journalism work it is defined by accuracy and sourcing. Both contexts however often operate under the assumption that once the numbers are right the work is done.</p>
+                        <p><strong>What is your relationship to this data or community?</strong> I cannot treat these numbers as abstract. The 1.7 million rows of transactions in this audit do not just represent corporate paperwork they represent the economic precarity of the working public. When insiders can convert advance knowledge of a market crash into private profit the ethics of information asymmetry becomes a lived reality for average people whose long term financial security is tied to the stock market.</p>
+                        <p><strong>How might your perspective shape your analysis?</strong> This project sits at the intersection of quantitative research and social justice. I share technical methods with analysts who search for alpha in SEC disclosure data but I align politically with those who use these techniques to expose concentrated power. Grounding this project in Data Feminism allows me to ask not only who profits from administrative delay but what a more just financial infrastructure might look like if we optimized for the protection of public wealth rather than the speed of elite capital.</p>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
 
-                <!-- References -->
                 <div class="content-block">
                     <h2>References</h2>
                     <ol class="references-list">
-                        <li>Author, A. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
-                        <li>Author, B. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
-                        <li>Author, C. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
-                        <li>Author, D. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
+                        <li>D'Ignazio, C., & Klein, L. F. (2020). Data Feminism. MIT Press.</li>
+                        <li>Haraway, D. (1988). Situated Knowledges: The Science Question in Feminism and the Privilege of Partial Perspective. Feminist Studies, 14(3), 575 599.</li>
+                        <li>Securities and Exchange Commission. (2020 2025). EDGAR Form 4 Non Derivative Transaction Files.</li>
+                        <li>Refinitiv LSEG. (2023). StarMine Insider Filings Model US.</li>
+                        <li>Quiver Quantitative. (2026). Congress Insider Trading and Alternative Data APIs.</li>
                     </ol>
                 </div>
                 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- Navigation Buttons -->
                 <div class="page-navigation">
-                    <a href="index.html" class="btn btn-outline">← Back to Home</a>
-                    <a href="critical-analysis.html" class="btn btn-secondary">Next: Critical Analysis →</a>
+                    <a href="index.html" class="btn btn-outline">Back to Home</a>
+                    <a href="critical-analysis.html" class="btn btn-secondary">Next Critical Analysis</a>
                 </div>
 
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 Your Name. Data Justice Research Portfolio.</p>
+            <p>&copy; 2026 Minahil Saleem. Data Justice Research Portfolio.</p>
         </div>
     </footer>
 
