@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="subpage.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="container">
             <h1 class="logo"><a href="index.html">Minahil Saleem</a></h1>
@@ -22,106 +21,90 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
     <section class="page-header">
         <div class="container">
             <h1>Critical Data Analysis</h1>
-            <p class="page-subtitle">Data audit, visualization, and harm analysis</p>
+            <p class="page-subtitle">Data audit, visualization, and intersectional harm analysis</p>
         </div>
     </section>
 
-    <!-- Content Section -->
     <section class="content-section">
         <div class="container">
             <div class="content-wrapper">
                 
-                <!-- Data Availability & Methodology -->
                 <div class="content-block">
                     <h2>Data Availability & Methodology</h2>
                     
                     <div class="methodology-section">
                         <h3>Data Collection</h3>
-                        <p><strong>How is the data collected?</strong> Describe the collection methods, tools, and processes.</p>
-                        <p><strong>What data is collected?</strong> List the specific variables, fields, and types of information gathered.</p>
+                        <p><strong>How is the data collected?</strong> The data for this audit is sourced from the U.S. Securities and Exchange Commission (SEC) EDGAR database. Specifically, it relies on mandatory self-reported Form 4 filings, which corporate insiders must submit within two business days following a transaction. The data is publicly hosted but heavily siloed into fragmented, quarterly tab-separated (TSV) files spanning from 2006 to 2025.</p>
+                        <p><strong>What data is collected?</strong> The dataset captures transaction metadata, including the <code>ACCESSION_NUMBER</code> (unique identifier), <code>TRANS_DATE</code> (when the trade occurred), <code>FILING_DATE</code> (when the public was notified), transaction shares, price per share, and the insider's relationship to the company. My specific audit focuses on the timeline delta between the transaction and the filing.</p>
                     </div>
                     
                     <div class="methodology-section">
                         <h3>Data Analysis & Use</h3>
-                        <p><strong>How is the data analyzed?</strong> Explain the analytical methods and techniques used.</p>
-                        <p><strong>How is the data used?</strong> Describe how the analysis informs decisions, policies, or actions.</p>
-                    </div>
-                    
-                    <!-- For Algorithm Projects -->
-                    <div class="methodology-section algorithm-specific">
-                        <h3>Training Data (For Algorithm Projects)</h3>
-                        <p><strong>Where does the training data come from?</strong></p>
-                        <p><strong>What's included or excluded?</strong></p>
-                        <p><strong>Who labeled the data?</strong> Consider how labeling decisions shape the algorithm.</p>
+                        <p><strong>How is the data analyzed?</strong> Using Python and the <code>pandas</code> library, I executed a recursive search to consolidate over 1.7 million rows of Form 4 Non-Derivative Transactions (spanning 2020–2025). The analysis involved inner-merging transaction datasets with submission metadata on their unique accession numbers. I calculated the "Reporting Lag" by subtracting the transaction date from the filing date, and then binned the data into congressional wealth brackets to analyze compliance rates across different economic tiers.</p>
+                        <p><strong>How is the data used?</strong> This analysis is used to interrogate the temporal asymmetry of financial markets. Rather than using the data to predict stock prices (seeking "alpha"), this project uses the data to expose how the 48-hour regulatory delay operates as a mechanism for structural inequality.</p>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-
-                <!-- Data Audit -->
                 <div class="content-block">
                     <h2>Data Audit</h2>
-                    <p>Document your technical analysis of the dataset. Include:</p>
+                    <p>A technical analysis of the 1.7 million row dataset reveals deep structural flaws in the SEC's collection and verification architecture.</p>
                     
                     <div class="audit-section">
                         <h3>Data Cleaning & Preprocessing</h3>
-                        <p>Describe the steps you took to clean and prepare the data:</p>
+                        <p>To compute the reporting lag, the fragmented data had to be standardized. The steps included:</p>
                         <ul>
-                            <li>Missing data handling</li>
-                            <li>Outlier detection and treatment</li>
-                            <li>Data transformation or normalization</li>
-                            <li>Variable creation or recoding</li>
+                            <li><strong>Consolidation:</strong> Recursive glob searches to combine scattered quarterly TSV files into a single dataframe.</li>
+                            <li><strong>Date Coercion:</strong> Using <code>pd.to_datetime(errors='coerce')</code> to force inconsistent SEC string formats into datetime objects.</li>
+                            <li><strong>Missing Data & Anomalies:</strong> Dropping entries with "NaT" (Not a Time) values and filtering out negative lags (which represent logical impossibilities or clerical errors).</li>
+                            <li><strong>Variable Creation:</strong> Multiplying shares by price-per-share to create a total <code>Value</code> column, then categorizing trades into specific wealth brackets (e.g., &lt;$1k, $500k-$1M, &gt;$1M).</li>
                         </ul>
                         
                         <div class="code-example">
-                            <h4>Code Snippet (Optional)</h4>
-                            <pre><code># Example: Show key data cleaning steps
-# You can include screenshots of your code or embed it here
-import pandas as pd
-df = pd.read_csv('data.csv')
-# ... your analysis code ...</code></pre>
+                            <h4>Python Data Pipeline Core Logic</h4>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+# Merge transaction and submission data
+merged = pd.merge(trans, sub, on='ACCESSION_NUMBER', how='inner')
+
+# Clean and coerce dates
+merged['TRANS_DATE'] = pd.to_datetime(merged['TRANS_DATE'], errors='coerce')
+merged['FILING_DATE'] = pd.to_datetime(merged['FILING_DATE'], errors='coerce')
+merged = merged.dropna(subset=['TRANS_DATE', 'FILING_DATE'])
+
+# Calculate the critical "Reported Silence" window
+merged['Lag'] = (merged['FILING_DATE'] - merged['TRANS_DATE']).dt.days</code></pre>
                         </div>
                     </div>
                     
                     <div class="audit-section">
-                        <h3>Statistical Summary</h3>
+                        <h3>Statistical Summary of Reporting Lag</h3>
+                        <p>The statistical realities of the "Reporting Lag" demonstrate a massive variance between median compliance and extreme outliers.</p>
                         <div class="stats-table">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Variable</th>
-                                        <th>N</th>
-                                        <th>Mean/Mode</th>
-                                        <th>Std Dev</th>
-                                        <th>Min</th>
-                                        <th>Max</th>
-                                        <th>Missing (%)</th>
+                                        <th>N (Rows)</th>
+                                        <th>Median</th>
+                                        <th>Mean</th>
+                                        <th>Max Lag</th>
+                                        <th>Missing/Dropped (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Variable 1</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Variable 2</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
+                                        <td>Reporting Lag (Days)</td>
+                                        <td>1,732,401</td>
+                                        <td>2.0 Days</td>
+                                        <td>20.3 Days</td>
+                                        <td>~2,000+ Yrs (Errors)</td>
+                                        <td>~4.2%</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -129,174 +112,111 @@ df = pd.read_csv('data.csv')
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-
-                <!-- Data Cleaning Reflection -->
                 <div class="content-block">
                     <h2>Data Cleaning Reflection</h2>
                     <div class="reflection-box">
-                        <p>Reflect critically on the decisions you made during data processing:</p>
-                        <ul>
-                            <li><strong>What assumptions did you make?</strong> How might these assumptions introduce bias?</li>
-                            <li><strong>What choices did you face?</strong> (e.g., how to handle missing data, outliers, categorization)</li>
-                            <li><strong>Who might be harmed by these decisions?</strong> Consider how your choices might affect different groups.</li>
-                            <li><strong>What alternatives did you consider?</strong> Why did you choose your approach?</li>
-                        </ul>
+                        <p><strong>The Bias of "Clean" Data:</strong> When standardizing the dates to calculate the reporting lag, my Python script utilized the <code>errors='coerce'</code> function. This automatically converted unparseable or severely corrupted date strings into null values, effectively dropping them from the analysis. While this is standard data science practice, from a Data Feminist perspective, it functions as a form of digital erasure.</p>
+                        <p>By dropping the messiest data to create a clean statistical model, the algorithm introduces a severe <strong>Survivorship Bias</strong>. It naturally hides the most evasive, unaccountable actors. It rewards "neat" reporting and silences the chaotic data that often characterizes the most predatory corners of the market. This reflection highlighted a critical limitation: by optimizing for computational legibility, my own oversight algorithm unintentionally reinforced the privacy of the powerful.</p>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-
-                <!-- Visualization Analysis -->
                 <div class="content-block">
                     <h2>Visualization Analysis</h2>
-                    <p><em>Choose one: Either critically examine 3 existing visualizations OR create 2 new visualizations</em></p>
+                    <p>The following visualizations were generated from the cleaned SEC dataset to expose the mechanics of temporal asymmetry.</p>
                     
                     <div class="viz-analysis">
-                        <h3>Visualization 1</h3>
+                        <h3>Visualization 1: The Compliance Paradox</h3>
                         <div class="visualization-placeholder">
-                            <img src="images/viz-1.png" alt="Visualization 1">
-                            <p class="caption">Figure 1: [Description of visualization]</p>
+                            <img src="images/viz-1-wealth.png" alt="Bar chart showing delayed trades by wealth bracket">
+                            <p class="caption">Figure 1: Percentage of Trades with Delayed Disclosure (>2 Days) by Transaction Size.</p>
                         </div>
                         
                         <div class="viz-critique">
                             <h4>What story does it tell?</h4>
-                            <p>Analyze what narrative or message this visualization communicates.</p>
+                            <p>This visualization reveals what I term the "Compliance Paradox." The highest-wealth insiders (executing trades >$1M) possess the highest rates of perfect compliance with the 48-hour rule, while lower-value trades experience significantly higher rates of administrative delay. It tells the story of compliance as an institutional luxury. The "Data Elite" use expensive legal teams and automated software to master the algorithmic deadline.</p>
                             
                             <h4>What story does it hide?</h4>
-                            <p>Critically examine what is obscured, minimized, or excluded from this visualization.</p>
-                            
-                            <h4>Design Choices</h4>
-                            <ul>
-                                <li>Color choices and their implications</li>
-                                <li>Scale and axis decisions</li>
-                                <li>What's included vs. excluded</li>
-                                <li>Who is the intended audience?</li>
-                            </ul>
+                            <p>By showing that the elite are "compliant," the chart hides the material harm of that compliance. It obscures the fact that a 48-hour delay for a $50 million trade is legally acceptable, yet devastating to the market. The binary of "delayed vs. on-time" implies that on-time trades are inherently harmless, failing to capture how the elite use the law as a shield to legitimize information hoarding.</p>
                         </div>
                     </div>
                     
                     <div class="viz-analysis">
-                        <h3>Visualization 2</h3>
+                        <h3>Visualization 2: Macro Harm and Situated Knowledge</h3>
                         <div class="visualization-placeholder">
-                            <img src="images/viz-2.png" alt="Visualization 2">
-                            <p class="caption">Figure 2: [Description of visualization]</p>
+                            <img src="images/viz-2-covid.png" alt="Area chart showing insider trading spike before COVID-19 crash">
+                            <p class="caption">Figure 2: Insider Trading Volume vs. COVID-19 Market Crash Timeline (Early 2020).</p>
                         </div>
                         
                         <div class="viz-critique">
                             <h4>What story does it tell?</h4>
-                            <p>Analyze what narrative or message this visualization communicates.</p>
+                            <p>This chart maps insider trading volume against the March 2020 COVID-19 crash. It shows a massive spike in insider sell-offs starting nearly three weeks before the National Emergency was declared. It tells a story of <em>Situated Knowledges</em> (Haraway, 1988): insiders possessed highly specific, localized knowledge of the impending economic shutdown, and used the SEC's 48-hour reporting lag as a buffer to secure their wealth while the public was assured of stability.</p>
                             
                             <h4>What story does it hide?</h4>
-                            <p>Critically examine what is obscured, minimized, or excluded from this visualization.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="viz-analysis">
-                        <h3>Visualization 3 (if analyzing existing visualizations)</h3>
-                        <div class="visualization-placeholder">
-                            <img src="images/viz-3.png" alt="Visualization 3">
-                            <p class="caption">Figure 3: [Description of visualization]</p>
-                        </div>
-                        
-                        <div class="viz-critique">
-                            <h4>What story does it tell?</h4>
-                            <p>Analyze what narrative or message this visualization communicates.</p>
-                            
-                            <h4>What story does it hide?</h4>
-                            <p>Critically examine what is obscured, minimized, or excluded from this visualization.</p>
+                            <p>The visualization hides the faces of the victims. A line chart showing trading volume cannot depict the teachers' pension funds, the union retirement accounts, or the middle-class 401(k)s that ultimately absorbed the mathematical aftershocks of this massive capital flight. It visualizes the extraction, but abstracts the poverty it causes.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- FOR DATA INITIATIVE PROJECTS -->
-                <div class="content-block data-initiative-section">
-                    <h2>Algorithmic Implications (Data Initiative Projects)</h2>
-                    <div class="harm-analysis">
-                        <p>If this data was fed into an algorithm, who would be harmed?</p>
-                        
-                        <div class="harm-item">
-                            <h4>Potential Harm 1</h4>
-                            <p>Describe a specific way this data could cause harm if used algorithmically.</p>
-                            <p><strong>Connection to readings:</strong> Link to course concepts (e.g., data feminism principles, power structures, etc.)</p>
-                        </div>
-                        
-                        <div class="harm-item">
-                            <h4>Potential Harm 2</h4>
-                            <p>Describe another potential harm.</p>
-                            <p><strong>Connection to readings:</strong> Link to course concepts.</p>
-                        </div>
-                        
-                        <div class="harm-item">
-                            <h4>Potential Harm 3</h4>
-                            <p>Describe a third potential harm.</p>
-                            <p><strong>Connection to readings:</strong> Link to course concepts.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- extra white space between sections -->
-                <p> <br> </p>
-
-                <!-- FOR ALGORITHM PROJECTS -->
                 <div class="content-block algorithm-section">
-                    <h2>Algorithm Logic Analysis (Algorithm Projects)</h2>
+                    <h2>Algorithm Logic Analysis</h2>
                     
                     <div class="logic-analysis">
                         <h3>Decision-Making Process</h3>
-                        <p><strong>How does the system make decisions?</strong> Describe the algorithmic logic and decision rules.</p>
-                        <p><strong>What is it being optimized for?</strong> Identify the objective function or goal the algorithm pursues.</p>
+                        <p><strong>The Regulatory Algorithm:</strong> The SEC's reporting system operates on a binary logic based on a rigid 48-hour window. The algorithm is optimized for <em>institutional legitimacy</em> rather than real-time public accountability. By hardcoding a 48-hour delay into the law, the system structurally determines that the public does not "need" to know about a trade until two days after the material impact has already occurred.</p>
                         
-                        <h3>Logic Flowchart</h3>
+                        <h3>Logic Flowcharts</h3>
+                        <p>To understand the mechanics of this system, we must map both the institutional path of the data (SEC) and the editorial path of the audit (Researcher).</p>
+                        
+                        <div class="visualization-placeholder" style="margin-bottom: 40px;">
+                            <img src="images/sec_logic_flowchart.png" alt="SEC Regulatory Logic Flowchart">
+                            <p class="caption">Figure 3: SEC Regulatory Logic - The Path of Temporal Asymmetry</p>
+                        </div>
+
                         <div class="visualization-placeholder">
-                            <img src="images/logic-flowchart.png" alt="Algorithm Logic Flowchart">
-                            <p class="caption">Figure: Decision-making flowchart showing how the algorithm processes inputs and generates outputs</p>
+                            <img src="images/researcher_logic_flowchart.png" alt="Researcher Data Pipeline Logic Flowchart">
+                            <p class="caption">Figure 4: Researcher's Algorithm - Data Pipeline and Sanitization Logic</p>
                         </div>
                     </div>
                     
-                    <div class="harm-analysis">
+                    <div class="harm-analysis" style="margin-top: 40px;">
                         <h3>Intersectional Harm Documentation</h3>
-                        <p>Analyze how this system creates compounded harm across multiple dimensions of identity and power.</p>
+                        <p>When algorithmic delay and institutional power converge, the result is the systemic extraction of wealth from the working class. Through the lens of Data Feminism (<em>Examining Power</em>), the 48-hour delay ceases to be a neutral administrative variable.</p>
                         
                         <div class="harm-item">
-                            <h4>Harm Analysis 1</h4>
-                            <p>Describe a specific harm and how it compounds across intersecting identities (e.g., race + gender, class + disability, etc.)</p>
-                            <p><strong>Connection to readings:</strong> Link to course concepts about intersectionality and data justice.</p>
+                            <h4>Harm Analysis 1: The Automation of Structural Poverty</h4>
+                            <p>The material consequences of this system are borne by the American middle class. Most average citizens participate in the market through 401(k) plans and mutual funds, which operate on slower, public-facing cycles. Because the regulatory algorithm grants a two-day window of privacy, insiders liquidate millions before the public is aware. By the time the data reaches a retirement fund manager, the "alpha" has already been extracted by high-frequency algorithms. This hierarchy ensures the public is always buying at the peak and selling at the trough, effectively automating poverty.</p>
+                            <p><strong>Connection to readings:</strong> This perfectly illustrates D'Ignazio and Klein’s mandate to <em>Examine Power</em>. The algorithm treats the 48-hour reporting lag as a neutral variable, rather than a deliberate tool for wealth concentration.</p>
                         </div>
                         
                         <div class="harm-item">
-                            <h4>Harm Analysis 2</h4>
-                            <p>Describe another intersectional harm.</p>
-                            <p><strong>Connection to readings:</strong> Link to course concepts.</p>
+                            <h4>Harm Analysis 2: The Facade of Objective Legitimacy</h4>
+                            <p>By defining "clean" and "compliant" data purely by a temporal timestamp (Did it arrive within 48 hours?), the system forces chaotic, highly political human behavior into a sterile binary. An algorithm fed this data validates a massive insider pre-shock sell-off as routine and legitimate simply because the paperwork was filed on time. It grants a "Privacy of Complexity" to the most unaccountable actors.</p>
+                            <p><strong>Connection to readings:</strong> This reflects the danger of failing to <em>Challenge Binaries</em>. The binary of on-time vs. delayed completely erases the situated context of the trade, allowing algorithmic trading platforms to commodify the data without interrogating its moral hazard.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- extra white space between sections -->
                 <p> <br> </p>
 
-                <!-- References -->
                 <div class="content-block">
                     <h2>References</h2>
                     <ol class="references-list">
-                        <li>Author, A. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
-                        <li>Author, B. (Year). Title of work. <em>Journal Name</em>, volume(issue), pages.</li>
-                        <li>[Continue with at least 8 sources total, including those from Part 1]</li>
+                        <li>D'Ignazio, C., & Klein, L. F. (2020). <em>Data Feminism</em>. MIT Press.</li>
+                        <li>Haraway, D. (1988). Situated Knowledges: The Science Question in Feminism and the Privilege of Partial Perspective. <em>Feminist Studies</em>, 14(3), 575–599.</li>
+                        <li>Securities and Exchange Commission (SEC). (2006-2025). <em>Insider Transactions Data Sets (Form 4)</em>. EDGAR Database.</li>
+                        <li>Quiver Quantitative. (2026). <em>Congress Insider Trading and Alternative Data APIs</em>.</li>
+                        <li>Refinitiv (LSEG). (2023). <em>StarMine Insider Filings Model US</em>.</li>
                     </ol>
                 </div>
-
-                <!-- extra white space between sections -->
-                <p> <br> </p>
                 
+                <p> <br> </p>
 
-                <!-- Navigation Buttons -->
                 <div class="page-navigation">
                     <a href="introduction.html" class="btn btn-outline">← Previous: Introduction</a>
                     <a href="alternatives.html" class="btn btn-secondary">Next: Counter-Data Alternatives →</a>
@@ -306,10 +226,9 @@ df = pd.read_csv('data.csv')
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 Your Name. Data Justice Research Portfolio.</p>
+            <p>&copy; 2026 Minahil Saleem. Data Justice Research Portfolio.</p>
         </div>
     </footer>
 
